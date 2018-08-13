@@ -44,12 +44,6 @@ resource "null_resource" "master" {
     user = "${var.os_user}"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "until test -f /opt/dcos-prereqs.installed; do echo waiting for init install to finish;sleep 30;done",
-    ]
-  }
-
   provisioner "file" {
     content     = "${module.dcos-mesos-master.script}"
     destination = "run.sh"
@@ -58,7 +52,7 @@ resource "null_resource" "master" {
   # Wait for bootstrapnode to be ready
   provisioner "remote-exec" {
     inline = [
-      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/dcos_install.sh); do printf 'waiting for bootstrap node to serve...'; sleep 20; done",
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/dcos_install.sh); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
     ]
   }
 
