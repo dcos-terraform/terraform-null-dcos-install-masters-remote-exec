@@ -37,6 +37,10 @@ module "dcos-mesos-master" {
 }
 
 resource "null_resource" "master" {
+  triggers = {
+    dependency_id = "${join(",", var.depends_on)}"
+  }
+
   count = "${var.num_masters}"
 
   connection {
