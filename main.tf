@@ -36,15 +36,22 @@ module "dcos-mesos-master" {
   role              = "dcos-mesos-master"
 }
 
-resource "null_resource" "master" {
+locals {
+  # install_script = "${var.dcos_install_mode == "install" ? "dcos_install.sh" : "dcos_node_upgrade.sh"}"
+  install_script = "dcos_install.sh"
+}
+
+resource "null_resource" "master1" {
   triggers = {
     dependency_id = "${join(",", var.depends_on)}"
+    dcos_version  = "${var.dcos_version}"
   }
 
-  count = "${var.num_masters}"
+  count = "${var.num_masters >= 1 ? 1 : 0}"
+
 
   connection {
-    host = "${element(var.master_ips, count.index)}"
+    host = "${element(var.master_ips, 1)}"
     user = "${var.os_user}"
   }
 
@@ -56,7 +63,7 @@ resource "null_resource" "master" {
   # Wait for bootstrapnode to be ready
   provisioner "remote-exec" {
     inline = [
-      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/dcos_install.sh); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
     ]
   }
 
@@ -69,4 +76,292 @@ resource "null_resource" "master" {
   }
 
   depends_on = ["module.dcos-mesos-master"]
+}
+
+resource "null_resource" "master2" {
+  triggers = {
+    dependency_id = "${null_resource.master1.id}"
+    dcos_version  = "${var.dcos_version}"
+  }
+
+  count = "${var.num_masters >= 2 ? 1 : 0}"
+
+  connection {
+    host = "${element(var.master_ips, 2)}"
+    user = "${var.os_user}"
+  }
+
+  provisioner "file" {
+    content     = "${module.dcos-mesos-master.script}"
+    destination = "run.sh"
+  }
+
+  # Wait for bootstrapnode to be ready
+  provisioner "remote-exec" {
+    inline = [
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+    ]
+  }
+
+  # Install Master Script
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x run.sh",
+      "sudo ./run.sh",
+    ]
+  }
+
+  depends_on = ["null_resource.master1"]
+}
+
+resource "null_resource" "master3" {
+  triggers = {
+    dependency_id = "${null_resource.master2.id}"
+    dcos_version  = "${var.dcos_version}"
+  }
+
+  count = "${var.num_masters >= 3 ? 1 : 0}"
+
+  connection {
+    host = "${element(var.master_ips, 3)}"
+    user = "${var.os_user}"
+  }
+
+  provisioner "file" {
+    content     = "${module.dcos-mesos-master.script}"
+    destination = "run.sh"
+  }
+
+  # Wait for bootstrapnode to be ready
+  provisioner "remote-exec" {
+    inline = [
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+    ]
+  }
+
+  # Install Master Script
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x run.sh",
+      "sudo ./run.sh",
+    ]
+  }
+
+  depends_on = ["null_resource.master2"]
+}
+
+resource "null_resource" "master4" {
+  triggers = {
+    dependency_id = "${null_resource.master3.id}"
+    dcos_version  = "${var.dcos_version}"
+  }
+
+  count = "${var.num_masters >= 4 ? 1 : 0}"
+
+  connection {
+    host = "${element(var.master_ips, 4)}"
+    user = "${var.os_user}"
+  }
+
+  provisioner "file" {
+    content     = "${module.dcos-mesos-master.script}"
+    destination = "run.sh"
+  }
+
+  # Wait for bootstrapnode to be ready
+  provisioner "remote-exec" {
+    inline = [
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+    ]
+  }
+
+  # Install Master Script
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x run.sh",
+      "sudo ./run.sh",
+    ]
+  }
+
+  depends_on = ["null_resource.master3"]
+}
+
+resource "null_resource" "master5" {
+  triggers = {
+    dependency_id = "${null_resource.master4.id}"
+    dcos_version  = "${var.dcos_version}"
+  }
+
+  count = "${var.num_masters >= 5 ? 1 : 0}"
+
+  connection {
+    host = "${element(var.master_ips, 5)}"
+    user = "${var.os_user}"
+  }
+
+  provisioner "file" {
+    content     = "${module.dcos-mesos-master.script}"
+    destination = "run.sh"
+  }
+
+  # Wait for bootstrapnode to be ready
+  provisioner "remote-exec" {
+    inline = [
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+    ]
+  }
+
+  # Install Master Script
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x run.sh",
+      "sudo ./run.sh",
+    ]
+  }
+
+  depends_on = ["null_resource.master4"]
+}
+
+resource "null_resource" "master6" {
+  triggers = {
+    dependency_id = "${null_resource.master5.id}"
+    dcos_version  = "${var.dcos_version}"
+  }
+
+  count = "${var.num_masters >= 6 ? 1 : 0}"
+
+  connection {
+    host = "${element(var.master_ips, 6)}"
+    user = "${var.os_user}"
+  }
+
+  provisioner "file" {
+    content     = "${module.dcos-mesos-master.script}"
+    destination = "run.sh"
+  }
+
+  # Wait for bootstrapnode to be ready
+  provisioner "remote-exec" {
+    inline = [
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+    ]
+  }
+
+  # Install Master Script
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x run.sh",
+      "sudo ./run.sh",
+    ]
+  }
+
+  depends_on = ["null_resource.master5"]
+}
+
+resource "null_resource" "master7" {
+  triggers = {
+    dependency_id = "${null_resource.master6.id}"
+    dcos_version  = "${var.dcos_version}"
+  }
+
+  count = "${var.num_masters >= 7 ? 1 : 0}"
+
+  connection {
+    host = "${element(var.master_ips, 7)}"
+    user = "${var.os_user}"
+  }
+
+  provisioner "file" {
+    content     = "${module.dcos-mesos-master.script}"
+    destination = "run.sh"
+  }
+
+  # Wait for bootstrapnode to be ready
+  provisioner "remote-exec" {
+    inline = [
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+    ]
+  }
+
+  # Install Master Script
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x run.sh",
+      "sudo ./run.sh",
+    ]
+  }
+
+  depends_on = ["null_resource.master6"]
+}
+
+resource "null_resource" "master8" {
+  triggers = {
+    dependency_id = "${null_resource.master7.id}"
+    dcos_version  = "${var.dcos_version}"
+  }
+
+  count = "${var.num_masters >= 8 ? 1 : 0}"
+
+  connection {
+    host = "${element(var.master_ips, 8)}"
+    user = "${var.os_user}"
+  }
+
+  provisioner "file" {
+    content     = "${module.dcos-mesos-master.script}"
+    destination = "run.sh"
+  }
+
+  # Wait for bootstrapnode to be ready
+  provisioner "remote-exec" {
+    inline = [
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+    ]
+  }
+
+  # Install Master Script
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x run.sh",
+      "sudo ./run.sh",
+    ]
+  }
+
+  depends_on = ["null_resource.master7"]
+}
+
+resource "null_resource" "master9" {
+  triggers = {
+    dependency_id = "${null_resource.master8.id}"
+    dcos_version  = "${var.dcos_version}"
+  }
+
+  count = "${var.num_masters >= 9 ? 1 : 0}"
+
+  connection {
+    host = "${element(var.master_ips, 9)}"
+    user = "${var.os_user}"
+  }
+
+  provisioner "file" {
+    content     = "${module.dcos-mesos-master.script}"
+    destination = "run.sh"
+  }
+
+  # Wait for bootstrapnode to be ready
+  provisioner "remote-exec" {
+    inline = [
+      "until $(curl --output /dev/null --silent --head --fail http://${var.bootstrap_private_ip}:${var.bootstrap_port}/${local.install_script}); do printf 'waiting for bootstrap node (%s:%d) to serve...' '${var.bootstrap_private_ip}' '${var.bootstrap_port}'; sleep 20; done",
+    ]
+  }
+
+  # Install Master Script
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x run.sh",
+      "sudo ./run.sh",
+    ]
+  }
+
+  depends_on = ["null_resource.master8"]
 }

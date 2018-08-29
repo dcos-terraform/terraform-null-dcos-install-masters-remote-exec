@@ -1,4 +1,4 @@
 output "depends" {
   description = "modules are missing the depends_on feature. Faking this feature with input and output variables"
-  value       = "${join(",", null_resource.master.*.id)}"
+  value       = "${element(null_resource.master1.*.id,1)}"
 }
