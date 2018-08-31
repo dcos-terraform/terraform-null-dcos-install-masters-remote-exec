@@ -33,6 +33,7 @@ module "dcos-mesos-master" {
   # Only allow upgrade and install as installation mode
   dcos_install_mode = "${var.dcos_install_mode}"
   dcos_version      = "${var.dcos_version}"
+  dcos_skip_checks  = "${var.dcos_skip_checks}"
   role              = "dcos-mesos-master"
 }
 
@@ -48,7 +49,6 @@ resource "null_resource" "master1" {
   }
 
   count = "${var.num_masters >= 1 ? 1 : 0}"
-
 
   connection {
     host = "${element(var.master_ips, 1)}"
