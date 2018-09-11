@@ -45,7 +45,6 @@ locals {
 resource "null_resource" "master1" {
   triggers = {
     dependency_id = "${join(",", var.depends_on)}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 1 ? 1 : 0}"
@@ -81,7 +80,6 @@ resource "null_resource" "master1" {
 resource "null_resource" "master2" {
   triggers = {
     dependency_id = "${null_resource.master1.id}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 2 ? 1 : 0}"
@@ -117,7 +115,6 @@ resource "null_resource" "master2" {
 resource "null_resource" "master3" {
   triggers = {
     dependency_id = "${null_resource.master2.id}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 3 ? 1 : 0}"
@@ -153,7 +150,6 @@ resource "null_resource" "master3" {
 resource "null_resource" "master4" {
   triggers = {
     dependency_id = "${null_resource.master3.id}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 4 ? 1 : 0}"
@@ -189,7 +185,6 @@ resource "null_resource" "master4" {
 resource "null_resource" "master5" {
   triggers = {
     dependency_id = "${null_resource.master4.id}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 5 ? 1 : 0}"
@@ -225,7 +220,6 @@ resource "null_resource" "master5" {
 resource "null_resource" "master6" {
   triggers = {
     dependency_id = "${null_resource.master5.id}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 6 ? 1 : 0}"
@@ -261,7 +255,6 @@ resource "null_resource" "master6" {
 resource "null_resource" "master7" {
   triggers = {
     dependency_id = "${null_resource.master6.id}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 7 ? 1 : 0}"
@@ -297,7 +290,6 @@ resource "null_resource" "master7" {
 resource "null_resource" "master8" {
   triggers = {
     dependency_id = "${null_resource.master7.id}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 8 ? 1 : 0}"
@@ -333,7 +325,6 @@ resource "null_resource" "master8" {
 resource "null_resource" "master9" {
   triggers = {
     dependency_id = "${null_resource.master8.id}"
-    dcos_version  = "${var.dcos_version}"
   }
 
   count = "${var.num_masters >= 9 ? 1 : 0}"
