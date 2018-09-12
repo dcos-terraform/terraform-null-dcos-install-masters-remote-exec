@@ -44,7 +44,7 @@ locals {
 
 resource "null_resource" "master1" {
   triggers = {
-    dependency_id = "${join(",", var.depends_on)}"
+    trigger = "${join(",", var.trigger)}"
   }
 
   count = "${var.num_masters >= 1 ? 1 : 0}"
@@ -69,6 +69,7 @@ resource "null_resource" "master1" {
   # Install Master Script
   provisioner "remote-exec" {
     inline = [
+      "# depends ${join(",",var.depends_on)}'",
       "sudo chmod +x run.sh",
       "sudo ./run.sh",
     ]
