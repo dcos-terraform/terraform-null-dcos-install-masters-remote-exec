@@ -25,11 +25,20 @@ module "dcos-masters-install" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| bootstrap_port | bootstrap servers port | string | `80` | no |
-| bootstrap_private_ip | bootrstrap server private ip | string | - | yes |
-| dcos_install_mode | specifies which type of command to execute. Options: `install` or `upgrade` | string | `install` | no |
-| dcos_version | specifies which dcos version instruction to use. Options: `1.9.0`, `1.8.8`, etc. _See [dcos_download_path](https://github.com/dcos/tf_dcos_core/blob/master/download-variables.tf) or [dcos_version](https://github.com/dcos/tf_dcos_core/tree/master/dcos-versions) tree for a full list._ | string | `1.11.3` | no |
+| bootstrap_port | TCP port bootstrap nginx is listening on. Used to build the bootstrap URL. | string | `80` | no |
+| bootstrap_private_ip | Private IP bootstrap nginx is listening on. Used to build the bootstrap URL. | string | - | yes |
+| dcos_install_mode | Type of command to execute. Options: install or upgrade | string | `install` | no |
+| dcos_skip_checks | Upgrade option: Used to skip all dcos checks that may block an upgrade if any DC/OS component is unhealthly. (optional) applicable: 1.10+ | string | `false` | no |
+| dcos_version | Specifies which DC/OS version instruction to use. Options: 1.9.0, 1.8.8, etc. See dcos_download_path or dcos_version tree for a full list. | string | `1.11.3` | no |
+| depends_on | Modules are missing the depends_on feature. Faking this feature with input and output variables | string | `<list>` | no |
 | master_ips | List of masterips to SSH to | list | - | yes |
-| num_masters | Number of masters | string | - | yes |
-| os_user | The OS user to be used with ssh exec | string | `centos` | no |
+| num_masters | Specify the amount of masters. For redundancy you should have at least 3 | string | - | yes |
+| os_user | The OS user to be used | string | `centos` | no |
+| trigger | Triggers for null resource | string | `<list>` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| depends | Modules are missing the depends_on feature. Faking this feature with input and output variables |
 
