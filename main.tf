@@ -23,7 +23,7 @@
  */
 
 module "dcos-mesos-master" {
-  source  = "dcos-terraform/dcos-core/template"
+  source  = "../../template/dcos-core"
   version = "~> 0.1.0"
 
   # source               = "/Users/julferts/git/github.com/fatz/tf_dcos_core"
@@ -50,7 +50,7 @@ resource "null_resource" "master1" {
   count = "${var.num_masters >= 1 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 1)}"
+    host = "${element(var.master_ips, 0)}"
     user = "${var.os_user}"
   }
 
@@ -86,7 +86,7 @@ resource "null_resource" "master2" {
   count = "${var.num_masters >= 2 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 2)}"
+    host = "${element(var.master_ips, 1)}"
     user = "${var.os_user}"
   }
 
@@ -121,7 +121,7 @@ resource "null_resource" "master3" {
   count = "${var.num_masters >= 3 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 3)}"
+    host = "${element(var.master_ips, 2)}"
     user = "${var.os_user}"
   }
 
@@ -156,7 +156,7 @@ resource "null_resource" "master4" {
   count = "${var.num_masters >= 4 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 4)}"
+    host = "${element(var.master_ips, 3)}"
     user = "${var.os_user}"
   }
 
@@ -191,7 +191,7 @@ resource "null_resource" "master5" {
   count = "${var.num_masters >= 5 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 5)}"
+    host = "${element(var.master_ips, 4)}"
     user = "${var.os_user}"
   }
 
@@ -226,7 +226,7 @@ resource "null_resource" "master6" {
   count = "${var.num_masters >= 6 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 6)}"
+    host = "${element(var.master_ips, 5)}"
     user = "${var.os_user}"
   }
 
@@ -261,7 +261,7 @@ resource "null_resource" "master7" {
   count = "${var.num_masters >= 7 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 7)}"
+    host = "${element(var.master_ips, 6)}"
     user = "${var.os_user}"
   }
 
@@ -296,7 +296,7 @@ resource "null_resource" "master8" {
   count = "${var.num_masters >= 8 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 8)}"
+    host = "${element(var.master_ips, 7)}"
     user = "${var.os_user}"
   }
 
@@ -331,7 +331,7 @@ resource "null_resource" "master9" {
   count = "${var.num_masters >= 9 ? 1 : 0}"
 
   connection {
-    host = "${element(var.master_ips, 9)}"
+    host = "${element(var.master_ips, 8)}"
     user = "${var.os_user}"
   }
 
