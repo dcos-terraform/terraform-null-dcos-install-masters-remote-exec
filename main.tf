@@ -52,6 +52,7 @@ resource "null_resource" "master1" {
   connection {
     host = "${element(var.master_ips, 1)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
@@ -88,6 +89,7 @@ resource "null_resource" "master2" {
   connection {
     host = "${element(var.master_ips, 2)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
@@ -123,6 +125,7 @@ resource "null_resource" "master3" {
   connection {
     host = "${element(var.master_ips, 3)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
@@ -158,6 +161,7 @@ resource "null_resource" "master4" {
   connection {
     host = "${element(var.master_ips, 4)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
@@ -193,6 +197,7 @@ resource "null_resource" "master5" {
   connection {
     host = "${element(var.master_ips, 5)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
@@ -228,6 +233,7 @@ resource "null_resource" "master6" {
   connection {
     host = "${element(var.master_ips, 6)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
@@ -263,6 +269,7 @@ resource "null_resource" "master7" {
   connection {
     host = "${element(var.master_ips, 7)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
@@ -298,6 +305,7 @@ resource "null_resource" "master8" {
   connection {
     host = "${element(var.master_ips, 8)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
@@ -333,6 +341,7 @@ resource "null_resource" "master9" {
   connection {
     host = "${element(var.master_ips, 9)}"
     user = "${var.os_user}"
+    agent= true
   }
 
   provisioner "file" {
